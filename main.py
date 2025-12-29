@@ -59,7 +59,7 @@ async def predict(file: UploadFile):
     tmp_path = None
 
     try:
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as tmp:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp:
             tmp.write(contents)
             tmp_path = tmp.name
 
