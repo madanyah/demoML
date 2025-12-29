@@ -1,9 +1,11 @@
+import os
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
 from fastapi import FastAPI, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from transformers import pipeline
 import librosa
 import tempfile
-import os
 
 app = FastAPI()
 
@@ -29,30 +31,33 @@ LABEL_MAP = {
     "angry": "ang"
 }
 
+MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
+
 @app.get("/")
 async def root():
     return {"status": "OK", "message": "ML server running"}
 
 @app.post("/predict")
 async def predict(file: UploadFile):
+    if not file:
+        raise HTTPException(status_code=400, detail="No file uploaded")
+
+    if not file.content_type or not file.content_type.startswith("audio/"):
+        raise HTTPException(status_code=400, detail="Invalid audio file")
+
+    contents = await file.read()
+    if len(contents) > MAX_FILE_SIZE:
+        raise HTTPException(status_code=413, detail="File too large")
+
     tmp_path = None
 
     try:
-        # =========================
-        # SAVE FILE (WEBM / WAV)
-        # =========================
         with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as tmp:
-            tmp.write(await file.read())
+            tmp.write(contents)
             tmp_path = tmp.name
 
-        # =========================
-        # LOAD AUDIO (LIBROSA 🔥)
-        # =========================
         audio, sr = librosa.load(tmp_path, sr=16000, mono=True)
 
-        # =========================
-        # PREDICT
-        # =========================
         results = classifier(audio)
         top = results[0]
 
