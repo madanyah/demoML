@@ -1,7 +1,7 @@
 fastapi
 uvicorn[standard]
 transformers==4.57.3
-torchaudio==2.0.2+cpu
+torchaudio
 --extra-index-url https://download.pytorch.org/whl/cpu
 pydantic
 soundfile
