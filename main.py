@@ -28,7 +28,8 @@ def get_model():
         classifier = pipeline(
             "audio-classification",
             model="superb/wav2vec2-base-superb-er",
-            device=-1
+            device=-1,
+            model_kwargs={"force_download": True}
         )
         print("✅ Model loaded")
     return classifier
