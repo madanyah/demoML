@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+transformers
+torchaudio
+pydantic
+soundfile
+librosa
+torch
