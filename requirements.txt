@@ -9,5 +9,6 @@ librosa
 torch==2.1.2
 numpy==1.26.4
 python-multipart
+audioread
 # force rebuild
 
