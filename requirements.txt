@@ -1,13 +1,13 @@
 fastapi
 uvicorn[standard]
-transformers==4.57.3
+transformers==4.36.2
 torchaudio
 --extra-index-url https://download.pytorch.org/whl/cpu
 pydantic
 soundfile
 librosa
-torch==2.1.0
-numpy
+torch==2.1.2
+numpy==1.26.4
 python-multipart
 # force rebuild
 
